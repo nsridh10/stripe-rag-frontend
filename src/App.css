@@ -1,0 +1,36 @@
+.app-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: #0e0e16;
+}
+
+.right-panels {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.trace-toggle {
+  border-top: 1px solid #1a1a2e;
+  padding: 8px 12px;
+  background: #0a0a12;
+}
+
+.toggle-trace-btn {
+  width: 100%;
+  background: #14141e;
+  border: 1px solid #2a2a3e;
+  color: #8b85ff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.toggle-trace-btn:hover {
+  background: #1a1a2e;
+  border-color: #635bff50;
+}
