@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import Sidebar from "./components/Sidebar";
 import ChatArea from "./components/ChatArea";
 import SourcePanel from "./components/SourcePanel";
 import TracePanel from "./components/TracePanel";
-import { sendQuery, clearAllSessions } from "./api";
+import { sendQuery } from "./api";
 import type { ChatMessage, ToolCallSource, ExecutionTrace } from "./types";
 import "./App.css";
 
@@ -30,11 +30,6 @@ export default function App() {
   );
   const [activeSources, setActiveSources] = useState<ToolCallSource[]>([]);
   const [activeTrace, setActiveTrace] = useState<ExecutionTrace | null>(null);
-
-  // ---- Clear all sessions on page load ----
-  useEffect(() => {
-    clearAllSessions().catch(() => {});
-  }, []);
 
   // ---- Handlers ----
   const handleNewChat = useCallback(() => {
