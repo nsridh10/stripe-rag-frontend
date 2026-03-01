@@ -150,6 +150,7 @@ function NodeCard({
   const [expanded, setExpanded] = useState(false);
 
   const colorMap: Record<string, string> = {
+    frontier: "#f97316", // Orange - entry validation gate
     planner: "#635bff",
     budget_checker: "#f59e0b",
     executor: "#22c55e",

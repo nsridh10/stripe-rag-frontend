@@ -14,8 +14,16 @@ export default function App() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarRefresh, setSidebarRefresh] = useState(0);
+
+  // LLM Configuration
+  const [provider, setProvider] = useState(
+    () => localStorage.getItem("llm_provider") || "grok",
+  );
+  const [model, setModel] = useState(
+    () => localStorage.getItem("llm_model") || "llama-3.3-70b-versatile",
+  );
   const [apiKey, setApiKey] = useState(
-    () => localStorage.getItem("groq_api_key") || "",
+    () => localStorage.getItem("llm_api_key") || "",
   );
 
   // Cache for messages per session (preserves sources & traces)
@@ -110,7 +118,7 @@ export default function App() {
         id: `error-${Date.now()}`,
         role: "assistant",
         content:
-          "**Error:** Please enter your Groq API key in the sidebar before sending messages.",
+          "**Error:** Please configure your LLM provider and API key in the sidebar before sending messages.",
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMsg]);
@@ -131,8 +139,10 @@ export default function App() {
     try {
       const response = await sendQuery(
         text,
+        provider,
+        model,
+        apiKey,
         sessionId || undefined,
-        apiKey || undefined,
       );
 
       // Capture session ID from first response
@@ -168,7 +178,16 @@ export default function App() {
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, sessionId, apiKey]);
+  }, [input, isLoading, sessionId, provider, model, apiKey]);
+
+  const handleLlmConfigChange = useCallback(
+    (newProvider: string, newModel: string, newApiKey: string) => {
+      setProvider(newProvider);
+      setModel(newModel);
+      setApiKey(newApiKey);
+    },
+    [],
+  );
 
   const handleClosePanel = useCallback(() => {
     setRightPanel(null);
@@ -182,8 +201,10 @@ export default function App() {
         onSelectSession={handleSelectSession}
         onNewChat={handleNewChat}
         refreshTrigger={sidebarRefresh}
+        provider={provider}
+        model={model}
         apiKey={apiKey}
-        onApiKeyChange={setApiKey}
+        onLlmConfigChange={handleLlmConfigChange}
       />
 
       <ChatArea

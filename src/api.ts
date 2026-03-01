@@ -4,16 +4,22 @@ const API_BASE = "http://localhost:8000";
 
 export async function sendQuery(
   query: string,
+  provider: string,
+  model: string,
+  apiKey: string,
   sessionId?: string,
-  apiKey?: string,
 ): Promise<QueryResponse> {
-  const body: Record<string, string> = { query };
+  const body: Record<string, string> = {
+    query,
+    provider,
+    model,
+    api_key: apiKey,
+  };
   if (sessionId) body.session_id = sessionId;
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
-  if (apiKey) headers["X-API-Key"] = apiKey;
 
   const res = await fetch(`${API_BASE}/query`, {
     method: "POST",

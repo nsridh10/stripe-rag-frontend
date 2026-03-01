@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { MessageSquarePlus, Trash2, MessageCircle } from "lucide-react";
 import type { SessionListItem } from "../types";
 import { fetchSessions, deleteSession } from "../api";
-import ApiKeyInput from "./ApiKeyInput";
+import LlmConfigInput from "./LlmConfigInput";
 import "./Sidebar.css";
 
 interface Props {
@@ -10,8 +10,10 @@ interface Props {
   onSelectSession: (id: string) => void;
   onNewChat: () => void;
   refreshTrigger: number; // bump to re-fetch
+  provider: string;
+  model: string;
   apiKey: string;
-  onApiKeyChange: (key: string) => void;
+  onLlmConfigChange: (provider: string, model: string, apiKey: string) => void;
 }
 
 export default function Sidebar({
@@ -19,8 +21,10 @@ export default function Sidebar({
   onSelectSession,
   onNewChat,
   refreshTrigger,
+  provider,
+  model,
   apiKey,
-  onApiKeyChange,
+  onLlmConfigChange,
 }: Props) {
   const [sessions, setSessions] = useState<SessionListItem[]>([]);
 
@@ -47,7 +51,12 @@ export default function Sidebar({
       </div>
 
       <div className="sidebar-content">
-        <ApiKeyInput apiKey={apiKey} onApiKeyChange={onApiKeyChange} />
+        <LlmConfigInput
+          provider={provider}
+          model={model}
+          apiKey={apiKey}
+          onConfigChange={onLlmConfigChange}
+        />
 
         <div className="sessions-section">
           <div className="section-label">Conversations</div>

@@ -43,7 +43,7 @@ export interface ExecutionTrace {
 }
 
 export interface QueryResponse {
-  message_type: string; // "answer" | "clarification" | "error"
+  message_type: string; // "answer" | "clarification" | "rejected" | "error"
   answer: string;
   session_id: string;
   sources: ToolCallSource[];
