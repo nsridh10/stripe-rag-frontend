@@ -2,6 +2,8 @@
 
 The chat interface for the Stripe API Documentation RAG Agent. Built with **React + TypeScript + Vite**, it provides a multi-session chat UI with built-in LLM configuration, source document inspection, and full execution trace visibility.
 
+**Live demo**: [http://18.116.13.255](http://18.116.13.255) (AWS EC2)
+
 > **Backend repo**: [stripe-rag-agent](https://github.com/nsridh10/stripe-api-versiondoc-rag) — FastAPI + LangGraph agent pipeline, ChromaDB vector store, RAGAS evaluation
 
 ---
@@ -24,12 +26,12 @@ The interface has three panels:
 
 Users bring their own API key and select a provider + model directly from the sidebar. Supported providers:
 
-| Provider | Example Models |
-|----------|---------------|
-| **Groq** | `llama-3.3-70b-versatile`, `llama-3.1-8b-instant` |
-| **Grok (xAI)** | `grok-3-mini-fast` |
-| **Google Gemini** | `gemini-2.0-flash` |
-| **OpenAI** | `gpt-4o`, `gpt-4o-mini` |
+| Provider          | Example Models                                    |
+| ----------------- | ------------------------------------------------- |
+| **Groq**          | `llama-3.3-70b-versatile`, `llama-3.1-8b-instant` |
+| **Grok (xAI)**    | `grok-3-mini-fast`                                |
+| **Google Gemini** | `gemini-2.0-flash`                                |
+| **OpenAI**        | `gpt-4o`, `gpt-4o-mini`                           |
 
 The selected provider, model, and API key are sent with every query request — the backend does not store credentials. Configuration persists in the UI session but is never written to disk or local storage.
 
@@ -75,6 +77,7 @@ Every query produces a full execution trace showing how the 8-node LangGraph age
 ### Node Executions
 
 Each graph node is listed with:
+
 - **Name** — which node ran (Frontier, Planner, Budget Checker, Executor, Tools, Query Expander, Restructurer, Synthesizer)
 - **Duration** — wall-clock time in milliseconds
 - **Input/Output** — expandable JSON showing what each node received and produced
@@ -82,12 +85,14 @@ Each graph node is listed with:
 ### Routing Decisions
 
 Shows the path the request took through the graph:
+
 - **From → To** — which node routed to which
 - **Reason** — why that edge was taken (e.g., "Valid query, proceeding to planner", "Has tool calls, routing to tools node")
 
 ### Retrieval Plan
 
 The planner's original retrieval plan showing:
+
 - Which API classes and versions were targeted
 - What search queries were generated for each
 - Budget allocation vs. actual usage
@@ -100,13 +105,13 @@ This provides full transparency into the agent's reasoning — useful for debugg
 
 All backend calls go through [`src/api.ts`](src/api.ts):
 
-| Function | Endpoint | Purpose |
-|----------|----------|---------|
-| `sendQuery()` | `POST /query` | Sends user question + LLM credentials, returns answer + sources + trace |
-| `fetchSessions()` | `GET /sessions` | Loads session list for the sidebar |
-| `fetchSessionMessages()` | `GET /session/{id}/messages` | Loads chat history when switching sessions |
-| `deleteSession()` | `DELETE /session/{id}` | Removes a single session |
-| `clearAllSessions()` | `DELETE /sessions` | Clears all sessions (called on page load) |
+| Function                 | Endpoint                     | Purpose                                                                 |
+| ------------------------ | ---------------------------- | ----------------------------------------------------------------------- |
+| `sendQuery()`            | `POST /query`                | Sends user question + LLM credentials, returns answer + sources + trace |
+| `fetchSessions()`        | `GET /sessions`              | Loads session list for the sidebar                                      |
+| `fetchSessionMessages()` | `GET /session/{id}/messages` | Loads chat history when switching sessions                              |
+| `deleteSession()`        | `DELETE /session/{id}`       | Removes a single session                                                |
+| `clearAllSessions()`     | `DELETE /sessions`           | Clears all sessions (called on page load)                               |
 
 ### Message Cache
 
