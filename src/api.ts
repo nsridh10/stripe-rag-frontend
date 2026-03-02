@@ -1,6 +1,8 @@
 import type { QueryResponse, SessionListItem, MessageItem } from "./types";
 
-const API_BASE = "http://localhost:8000";
+// In development, set VITE_API_BASE=http://localhost:8000 in .env.local
+// In production (Docker + nginx proxy), leave unset — requests go same-origin
+const API_BASE = (import.meta.env.VITE_API_BASE as string) ?? "";
 
 export async function sendQuery(
   query: string,

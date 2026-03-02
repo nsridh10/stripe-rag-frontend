@@ -18,7 +18,7 @@ const LLM_OPTIONS = {
   },
   gemini: {
     name: "Gemini (Google)",
-    models: ["gemini-2.0-flash-exp"],
+    models: ["gemini-flash-latest"],
     keyPrefix: "AIza",
     getKeyUrl: "https://aistudio.google.com/apikey",
   },

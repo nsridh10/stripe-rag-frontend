@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 import { Send, Loader2, Sparkles } from "lucide-react";
-import type { ChatMessage, ToolCallSource, ExecutionTrace } from "../types";
+import type { ChatMessage } from "../types";
 import MessageBubble from "./MessageBubble";
 import "./ChatArea.css";
 
