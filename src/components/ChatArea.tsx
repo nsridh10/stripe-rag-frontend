@@ -45,6 +45,34 @@ export default function ChatArea({
             <Sparkles size={40} className="welcome-icon" />
             <h2>Stripe API Assistant</h2>
             <p>Ask me anything about the Stripe API documentation.</p>
+            <div className="welcome-info">
+              <div className="info-section">
+                <span className="info-label">Supported APIs</span>
+                <div className="api-badges">
+                  {[
+                    "Accounts",
+                    "Customers",
+                    "Payment Intents",
+                    "Subscriptions",
+                    "Refunds",
+                    "Products",
+                    "Prices",
+                    "Transfers",
+                  ].map((api) => (
+                    <span key={api} className="api-badge">
+                      {api}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="info-section">
+                <span className="info-label">API Versions</span>
+                <span className="version-badges">
+                  <span className="version-badge">Basil</span>
+                  <span className="version-badge">Clover</span>
+                </span>
+              </div>
+            </div>
             <div className="suggestions">
               {[
                 "How do I create a customer?",

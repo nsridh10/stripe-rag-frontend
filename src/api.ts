@@ -36,7 +36,9 @@ export async function sendQuery(
 export async function fetchSessions(): Promise<SessionListItem[]> {
   const res = await fetch(`${API_BASE}/sessions`);
   if (!res.ok) return [];
-  return res.json();
+  const sessions = await res.json();
+  console.log("[fetchSessions] Backend returned:", sessions); // ← add this
+  return sessions;
 }
 
 export async function fetchSessionMessages(

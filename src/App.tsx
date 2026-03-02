@@ -1,13 +1,15 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import ChatArea from "./components/ChatArea";
 import SourcePanel from "./components/SourcePanel";
 import TracePanel from "./components/TracePanel";
-import { sendQuery } from "./api";
+import { sendQuery, clearAllSessions } from "./api";
 import type { ChatMessage, ToolCallSource, ExecutionTrace } from "./types";
 import "./App.css";
 
 export default function App() {
+  const [ready, setReady] = useState(false);
+
   // ---- State ----
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -15,16 +17,10 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarRefresh, setSidebarRefresh] = useState(0);
 
-  // LLM Configuration
-  const [provider, setProvider] = useState(
-    () => localStorage.getItem("llm_provider") || "grok",
-  );
-  const [model, setModel] = useState(
-    () => localStorage.getItem("llm_model") || "llama-3.3-70b-versatile",
-  );
-  const [apiKey, setApiKey] = useState(
-    () => localStorage.getItem("llm_api_key") || "",
-  );
+  // LLM Configuration - no localStorage caching for security
+  const [provider, setProvider] = useState("groq");
+  const [model, setModel] = useState("llama-3.3-70b-versatile");
+  const [apiKey, setApiKey] = useState("");
 
   // Cache for messages per session (preserves sources & traces)
   const messageCache = useRef<Map<string, ChatMessage[]>>(new Map());
@@ -38,6 +34,13 @@ export default function App() {
   );
   const [activeSources, setActiveSources] = useState<ToolCallSource[]>([]);
   const [activeTrace, setActiveTrace] = useState<ExecutionTrace | null>(null);
+
+  // Clear all backend sessions on page load/refresh
+  useEffect(() => {
+    clearAllSessions()
+      .catch((err) => console.warn("Failed to clear sessions on startup:", err))
+      .finally(() => setReady(true));
+  }, []); // Empty deps = runs once on mount
 
   // ---- Handlers ----
   const handleNewChat = useCallback(() => {
@@ -193,6 +196,8 @@ export default function App() {
     setRightPanel(null);
     setSelectedMessageId(null);
   }, []);
+
+  if (!ready) return <div className="app-loading">Loading...</div>;
 
   return (
     <div className="app-layout">

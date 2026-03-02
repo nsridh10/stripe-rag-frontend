@@ -10,11 +10,11 @@ interface Props {
 }
 
 const LLM_OPTIONS = {
-  grok: {
-    name: "Grok (xAI)",
+  groq: {
+    name: "Groq",
     models: ["llama-3.3-70b-versatile"],
-    keyPrefix: "xai-",
-    getKeyUrl: "https://console.x.ai",
+    keyPrefix: "gsk_",
+    getKeyUrl: "https://console.groq.com/keys",
   },
   gemini: {
     name: "Gemini (Google)",
@@ -31,23 +31,29 @@ export default function LlmConfigInput({
   onConfigChange,
 }: Props) {
   const [isEditing, setIsEditing] = useState(!apiKey);
-  const [tempProvider, setTempProvider] = useState(provider);
-  const [tempModel, setTempModel] = useState(model);
+
+  // Ensure provider is valid, fallback to "groq" if not
+  const validProvider = LLM_OPTIONS[provider as keyof typeof LLM_OPTIONS]
+    ? provider
+    : "groq";
+  const validModel = LLM_OPTIONS[
+    validProvider as keyof typeof LLM_OPTIONS
+  ]?.models.includes(model)
+    ? model
+    : LLM_OPTIONS[validProvider as keyof typeof LLM_OPTIONS]?.models[0] ||
+      "llama-3.3-70b-versatile";
+
+  const [tempProvider, setTempProvider] = useState(validProvider);
+  const [tempModel, setTempModel] = useState(validModel);
   const [tempKey, setTempKey] = useState(apiKey);
   const [showKey, setShowKey] = useState(false);
 
   const currentProviderConfig =
-    LLM_OPTIONS[tempProvider as keyof typeof LLM_OPTIONS];
+    LLM_OPTIONS[tempProvider as keyof typeof LLM_OPTIONS] || LLM_OPTIONS.groq;
 
   const handleSave = () => {
     onConfigChange(tempProvider, tempModel, tempKey);
     setIsEditing(false);
-    // Save to localStorage
-    if (tempKey && tempProvider && tempModel) {
-      localStorage.setItem("llm_provider", tempProvider);
-      localStorage.setItem("llm_model", tempModel);
-      localStorage.setItem("llm_api_key", tempKey);
-    }
   };
 
   const handleCancel = () => {

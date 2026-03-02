@@ -45,6 +45,62 @@
   margin: 0;
 }
 
+.welcome-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+  width: 100%;
+  max-width: 750px;
+}
+
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.info-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #9090a8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.api-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.api-badge {
+  background: rgba(99, 91, 255, 0.1);
+  border: 1px solid rgba(99, 91, 255, 0.3);
+  color: #a5a0ff;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.version-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.version-badge {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #c0c0d0;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
 .suggestions {
   display: flex;
   flex-wrap: wrap;
